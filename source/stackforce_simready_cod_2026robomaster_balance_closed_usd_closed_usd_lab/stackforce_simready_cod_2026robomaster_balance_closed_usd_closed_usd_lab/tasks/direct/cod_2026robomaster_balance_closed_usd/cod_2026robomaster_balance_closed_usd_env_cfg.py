@@ -103,15 +103,15 @@ class Cod2026robomasterBalanceClosedUsdEnvCfg(DirectRLEnvCfg):
         actuators={
             "leg_joints": ImplicitActuatorCfg(
                 joint_names_expr=[".*_front_joint$", ".*_rear_joint$"],
-                stiffness=150,
-                damping=8,
+                stiffness=60,
+                damping=3,
                 effort_limit_sim=30,
                 velocity_limit_sim=40.0,
             ),
             "wheel_joints": ImplicitActuatorCfg(
                 joint_names_expr=[".*_Wheel_joint$"],
-                stiffness=80,
-                damping=5,
+                stiffness=30,
+                damping=2,
                 effort_limit_sim=3,
                 velocity_limit_sim=40.0,
             ),
