@@ -1,0 +1,9 @@
+Metadata-Version: 2.4
+Name: stackforce_simready_cod_2026robomaster_balance_closed_usd_closed_usd_lab
+Version: 0.1.0
+Summary: StackForce SimReady closed-chain USD Isaac Lab export for StackForce-Cod2026robomasterBalanceClosedUsd-ClosedUsd-v0
+Requires-Python: >=3.10
+Requires-Dist: psutil
+Dynamic: requires-dist
+Dynamic: requires-python
+Dynamic: summary
