@@ -128,19 +128,25 @@ class Cod2026robomasterBalanceClosedUsdEnv(DirectRLEnv):
 
     def _patch_missing_rigid_body_collisions(self):
         # Some USD examples contain rigid-body visual meshes but only partial
-        # collision coverage. For visible validation and training, missing leg
-        # colliders make the robot pass through the ground. Convert visual Mesh
-        # descendants of collider-less rigid bodies into convex-hull colliders.
+        # collision coverage. Only patch child-link bodies (passive leg links)
+        # to avoid expensive convex-hull computation on irrelevant geometry.
         if not getattr(self.cfg, "auto_collision_from_visuals", False):
             return
         stage = get_current_stage()
         patched = []
-        for prim in stage.TraverseAll():
-            schemas = {str(item) for item in prim.GetAppliedSchemas()}
+        # collect all prims once
+        all_prims = list(stage.TraverseAll())
+        for prim in all_prims:
+            prim_name = prim.GetName().lower()
+            if "child" not in prim_name and "link" not in prim_name:
+                continue
+            schemas = {str(s) for s in prim.GetAppliedSchemas()}
             if "PhysicsRigidBodyAPI" not in schemas:
                 continue
-            descendants = [item for item in stage.TraverseAll() if item.GetPath().HasPrefix(prim.GetPath()) and item != prim]
-            has_collision = any("PhysicsCollisionAPI" in {str(schema) for schema in item.GetAppliedSchemas()} for item in descendants)
+            descendants = [p for p in all_prims if p.GetPath().HasPrefix(prim.GetPath()) and p != prim]
+            has_collision = any(
+                "PhysicsCollisionAPI" in {str(s) for s in d.GetAppliedSchemas()} for d in descendants
+            )
             if has_collision:
                 continue
             for item in descendants:
