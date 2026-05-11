@@ -137,5 +137,6 @@ class Cod2026robomasterBalanceClosedUsdEnvCfg(DirectRLEnvCfg):
         "tracking_lin_vel": 0.5,
         "tracking_ang_vel": 0.2,
         "joint_symmetry": -1.0,
+        "wheel_air": -10.0,
         "custom_reward": 0.0,
     }
