@@ -6,7 +6,8 @@
       "Bash(python3 -c \"import isaaclab.assets; import inspect; print\\(inspect.getfile\\(isaaclab.assets\\)\\)\")",
       "Bash(find / -path \"*/isaaclab/assets/articulation*\" -name \"*.py\")",
       "Bash(conda info *)",
-      "Bash(pip list *)"
+      "Bash(pip list *)",
+      "Read(//workspace/isaaclab/source/isaaclab/isaaclab/sim/schemas/**)"
     ]
   }
 }

@@ -69,6 +69,7 @@ class Cod2026robomasterBalanceClosedUsdEnvCfg(DirectRLEnvCfg):
             usd_path=str(USD_PATH),
             activate_contact_sensors=False,
             rigid_props=sim_utils.RigidBodyPropertiesCfg(
+                kinematic_enabled=False,
                 disable_gravity=False,
                 retain_accelerations=False,
                 linear_damping=0.0,
