@@ -28,6 +28,7 @@ simulation_app = app_launcher.app
 import gymnasium as gym
 import torch
 from rsl_rl.runners import OnPolicyRunner
+from tensordict import TensorDict
 
 from isaaclab.envs import DirectRLEnvCfg, ManagerBasedRLEnvCfg
 from isaaclab_rl.rsl_rl import RslRlBaseRunnerCfg
@@ -55,8 +56,14 @@ class LegacyRslRlVecEnvWrapper:
         self.episode_length_buf = env.unwrapped.episode_length_buf
         self.extras = extras
 
+    def _obs_as_dict(self):
+        result = {"policy": self.obs_buf}
+        if self.privileged_obs_buf is not None:
+            result["critic"] = self.privileged_obs_buf
+        return TensorDict(result, batch_size=self.num_envs, device=self.device)
+
     def get_observations(self):
-        return self.obs_buf
+        return self._obs_as_dict()
 
     def get_privileged_observations(self):
         return self.privileged_obs_buf
@@ -67,7 +74,7 @@ class LegacyRslRlVecEnvWrapper:
         self.obs_buf = obs_dict["policy"]
         self.privileged_obs_buf = obs_dict.get("critic")
         self.extras = extras
-        return self.obs_buf, self.privileged_obs_buf
+        return self._obs_as_dict(), self.privileged_obs_buf
 
     def step(self, actions):
         if self.clip_actions is not None:
@@ -83,7 +90,7 @@ class LegacyRslRlVecEnvWrapper:
         self.rew_buf = rewards
         self.reset_buf = dones
         self.extras = extras
-        return self.obs_buf, self.privileged_obs_buf, rewards, dones, extras
+        return self._obs_as_dict(), rewards, dones, extras
 
     def close(self):
         return self.env.close()
@@ -110,10 +117,14 @@ def to_compatible_rsl_rl_cfg(agent_cfg):
     if _runner_uses_nested_class_name():
         policy_cfg.setdefault("class_name", "ActorCritic")
         algorithm_cfg.setdefault("class_name", "PPO")
+        return {"runner": runner_cfg, "policy": policy_cfg, "algorithm": algorithm_cfg}
     else:
-        runner_cfg.setdefault("policy_class_name", "ActorCritic")
-        runner_cfg.setdefault("algorithm_class_name", "PPO")
-    return {"runner": runner_cfg, "policy": policy_cfg, "algorithm": algorithm_cfg}
+        policy_cfg.setdefault("class_name", "ActorCritic")
+        algorithm_cfg.setdefault("class_name", "PPO")
+        result = dict(runner_cfg)
+        result["policy"] = policy_cfg
+        result["algorithm"] = algorithm_cfg
+        return result
 
 
 @hydra_task_config(args_cli.task, args_cli.agent)
