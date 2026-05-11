@@ -91,7 +91,7 @@ class Cod2026robomasterBalanceClosedUsdEnvCfg(DirectRLEnvCfg):
             ),
         ),
         init_state=ArticulationCfg.InitialStateCfg(
-            pos=(0.0, 0.0, 1),
+            pos=(0.0, 0.0, 0.26),
             rot=(1, 0, 0, 0),
             # Keep USD-authored closed-chain joint coordinates. The environment
             # captures the parsed PhysX joint state after startup and uses it for reset.
