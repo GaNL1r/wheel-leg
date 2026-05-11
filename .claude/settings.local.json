@@ -7,7 +7,9 @@
       "Bash(find / -path \"*/isaaclab/assets/articulation*\" -name \"*.py\")",
       "Bash(conda info *)",
       "Bash(pip list *)",
-      "Read(//workspace/isaaclab/source/isaaclab/isaaclab/sim/schemas/**)"
+      "Read(//workspace/isaaclab/source/isaaclab/isaaclab/sim/schemas/**)",
+      "Bash(python -c \"import rsl_rl; print\\(rsl_rl.__file__\\)\")",
+      "Bash(find / -maxdepth 6 -path \"*/rsl_rl/runners*\" -name \"*.py\")"
     ]
   }
 }
