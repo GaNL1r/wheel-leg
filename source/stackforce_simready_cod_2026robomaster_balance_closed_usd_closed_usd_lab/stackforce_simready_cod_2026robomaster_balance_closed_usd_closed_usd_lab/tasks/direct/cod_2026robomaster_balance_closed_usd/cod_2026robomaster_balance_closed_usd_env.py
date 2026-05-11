@@ -47,7 +47,7 @@ class Cod2026robomasterBalanceClosedUsdEnv(DirectRLEnv):
         joint_pos = self._robot.data.joint_pos.clone()
         joint_vel = torch.zeros_like(self._robot.data.default_joint_vel)
         all_ids = set(range(self._robot.num_joints))
-        active_ids = set(self._actuated_joint_ids.tolist()) if len(self._actuated_joint_ids) > 0 else set()
+        active_ids = set(self._actuated_joint_ids) if len(self._actuated_joint_ids) > 0 else set()
         passive_ids = sorted(all_ids - active_ids)
         if passive_ids:
             p_idx = torch.tensor(passive_ids, device=self.device)
