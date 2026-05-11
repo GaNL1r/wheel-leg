@@ -216,7 +216,7 @@ class Cod2026robomasterBalanceClosedUsdEnv(DirectRLEnv):
         rewards = {
             "alive": torch.ones(self.num_envs, device=self.device) * scales.get("alive", 0.0),
             "upright": torch.exp(-upright_error / 0.25) * scales.get("upright", 0.0),
-            "base_height": base_height_error * scales.get("base_height", 0.0),
+            "base_height": torch.exp(-base_height_error / 0.005) * scales.get("base_height", 0.0),
             "lin_vel_z": lin_vel_z * scales.get("lin_vel_z", 0.0),
             "ang_vel_xy": ang_vel_xy * scales.get("ang_vel_xy", 0.0),
             "joint_vel": joint_vel * scales.get("joint_vel", 0.0),
