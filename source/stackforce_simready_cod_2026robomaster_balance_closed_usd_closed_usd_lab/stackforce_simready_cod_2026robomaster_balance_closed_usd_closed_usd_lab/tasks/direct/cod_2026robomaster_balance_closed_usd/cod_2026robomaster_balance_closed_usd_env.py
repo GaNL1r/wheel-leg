@@ -233,7 +233,8 @@ class Cod2026robomasterBalanceClosedUsdEnv(DirectRLEnv):
             no_reset = torch.zeros_like(time_out)
             return no_reset, no_reset
         root_height = self._robot.data.root_pos_w[:, 2] - self._terrain.env_origins[:, 2]
-        died = root_height < 0.12
+        upright_error = torch.sum(torch.square(self._robot.data.projected_gravity_b[:, :2]), dim=1)
+        died = (root_height < 0.12) | (upright_error > 0.5)
         return died, time_out
 
     def _reset_idx(self, env_ids: torch.Tensor | None):
