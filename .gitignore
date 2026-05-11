@@ -1,0 +1,16 @@
+# Python bytecode
+__pycache__/
+*.pyc
+
+# Virtual environment
+.venv*/
+venv/
+
+# Training logs & checkpoints
+logs/
+
+# Hydra outputs
+outputs/
+
+# Claude Code local settings
+.claude/
