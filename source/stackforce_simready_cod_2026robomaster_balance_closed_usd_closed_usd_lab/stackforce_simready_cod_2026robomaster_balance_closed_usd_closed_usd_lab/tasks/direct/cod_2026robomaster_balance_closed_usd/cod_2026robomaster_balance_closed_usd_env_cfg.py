@@ -94,8 +94,8 @@ class Cod2026robomasterBalanceClosedUsdEnvCfg(DirectRLEnvCfg):
             pos=(0.0, 0.0, 0.26),
             rot=(1, 0, 0, 0),
             joint_pos={
-                ".*_front_joint$": -0.3,
-                ".*_rear_joint$": -0.3,
+                ".*_front_joint$": 0.3,
+                ".*_rear_joint$": 0.3,
                 ".*_Wheel_joint$": 0.0,
             },
             joint_vel={},
