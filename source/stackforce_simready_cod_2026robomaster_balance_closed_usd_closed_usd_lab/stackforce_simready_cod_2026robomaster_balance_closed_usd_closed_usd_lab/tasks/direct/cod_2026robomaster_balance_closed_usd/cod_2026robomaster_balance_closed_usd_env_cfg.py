@@ -127,7 +127,7 @@ class Cod2026robomasterBalanceClosedUsdEnvCfg(DirectRLEnvCfg):
     reward_scales = {
         "alive": 1.0,
         "upright": 0.25,
-        "base_height": -2.0,
+        "base_height": -10.0,
         "lin_vel_z": -1.0,
         "ang_vel_xy": -0.05,
         "joint_vel": -0.001,
