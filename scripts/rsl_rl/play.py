@@ -144,14 +144,13 @@ def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg, agent_cfg: RslRlBaseRun
     runner = OnPolicyRunner(wrapped_env, to_compatible_rsl_rl_cfg(agent_cfg), log_dir=None, device=env.unwrapped.device)
     runner.load(resume_path, load_optimizer=False)
     policy = runner.get_inference_policy(device=env.unwrapped.device)
-    obs_dict, _ = env.reset()
-    obs = obs_dict["policy"]
+    env.reset()
+    obs = wrapped_env.get_observations()
     steps = 0
     with torch.inference_mode():
         while simulation_app.is_running():
             actions = policy(obs)
-            obs_dict, _, _, _, _ = env.step(actions)
-            obs = obs_dict["policy"]
+            obs, _, _, _ = wrapped_env.step(actions)
             steps += 1
             if args_cli.num_steps > 0 and steps >= args_cli.num_steps:
                 break
