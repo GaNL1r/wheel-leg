@@ -41,14 +41,21 @@ class Cod2026robomasterBalanceClosedUsdEnv(DirectRLEnv):
 
     def _capture_usd_default_joint_state(self):
         # Closed-chain USD assets often rely on authored passive joint coordinates.
-        # Isaac Lab's config defaults every joint to zero unless we explicitly preserve
-        # the parsed PhysX state before the first reset.
+        # Preserve PHYSX passive joint state while keeping config-specified active
+        # joint defaults from init_state.joint_pos.
         self._robot.update(0.0)
         joint_pos = self._robot.data.joint_pos.clone()
         joint_vel = torch.zeros_like(self._robot.data.default_joint_vel)
-        self._robot.data.default_joint_pos[:] = joint_pos
+        all_ids = set(range(self._robot.num_joints))
+        active_ids = set(self._actuated_joint_ids.tolist()) if len(self._actuated_joint_ids) > 0 else set()
+        passive_ids = sorted(all_ids - active_ids)
+        if passive_ids:
+            p_idx = torch.tensor(passive_ids, device=self.device)
+            self._robot.data.default_joint_pos[:, p_idx] = joint_pos[:, p_idx]
+        else:
+            self._robot.data.default_joint_pos[:] = joint_pos
         self._robot.data.default_joint_vel[:] = joint_vel
-        self._robot.data.joint_pos_target[:] = joint_pos
+        self._robot.data.joint_pos_target[:] = self._robot.data.default_joint_pos
         self._robot.data.joint_vel_target[:] = joint_vel
 
     def _resample_commands(self, env_ids):
