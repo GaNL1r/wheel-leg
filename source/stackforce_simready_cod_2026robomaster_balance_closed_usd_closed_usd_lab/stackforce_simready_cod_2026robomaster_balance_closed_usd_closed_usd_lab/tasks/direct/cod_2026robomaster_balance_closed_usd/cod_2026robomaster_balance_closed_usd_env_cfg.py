@@ -118,7 +118,7 @@ class Cod2026robomasterBalanceClosedUsdEnvCfg(DirectRLEnvCfg):
     )
 
     actuated_joint_names = [".*_front_joint$", ".*_rear_joint$", ".*_Wheel_joint$"]
-    projected_loop_joint_names = []
+    projected_loop_joint_names = ["Right_Closure_Joint1", "Right_Closure_Joint2", "Left_Closure_Joint1", "Left_Closure_Joint2"]
     auto_collision_from_visuals = True
     strip_embedded_ground_prims = False
     base_height_target = 0.26
